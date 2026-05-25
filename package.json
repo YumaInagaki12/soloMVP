@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-moto": "nodemon server.js",
-    "start": "nodemon --exec tsx server.js",
+    "start": "nodemon server.js",
     "dev": "nodemon server.js",
     "build": "cd front && npm install && npm run build && rm -rf ../public && cp -r dist ../public"
   },
