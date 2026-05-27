@@ -18,7 +18,7 @@ function Top({ pets, setCurrentId }) {
             }}
           >
             <img src={pet.image} alt={pet.name}></img>
-            <p>ペットの名前：{pet.name}</p>
+            <p>名前：{pet.name}</p>
             <p>種類：{pet.breed}</p>
           </button>
         ))}

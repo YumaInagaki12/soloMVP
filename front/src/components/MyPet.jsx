@@ -27,8 +27,8 @@ function MyPet({ pets, healthLogs, currentId }) {
       if (log.water === "少ない") waterScore = 1;
 
       let poopScore = 3;
-      if (log.poop === "軟便・下痢") poopScore = 2;
-      if (log.poop === "硬い・出ない") poopScore = 1;
+      if (log.poop === "下痢気味") poopScore = 2;
+      if (log.poop === "出ない") poopScore = 1;
 
       return {
         ...log,

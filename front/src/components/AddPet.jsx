@@ -10,9 +10,9 @@ function AddPet({ setScreen }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader(); //FileRender()でfileを文字データに変換
-      reader.onloadend = () => setImage(reader.result);
-      reader.readAsDataURL(file);
+      const reader = new FileReader(); //FileRender()で専用のオブジェクトに変換
+      reader.onloadend = () => setImage(reader.result); //読み込んだらimageをセット
+      reader.readAsDataURL(file); //特殊な文字列に変換
     }
   };
 
@@ -86,7 +86,9 @@ function AddPet({ setScreen }) {
           />
           メス
         </div>
-        <button type="submit">登録</button>
+        <button type="submit" onClick={() => setScreen("top")}>
+          登録
+        </button>
       </form>
       <div>
         <button onClick={() => setScreen("top")}>TOP</button>

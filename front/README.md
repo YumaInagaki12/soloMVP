@@ -1,16 +1,38 @@
-# React + Vite
+```sh
+npm init -y
+npm install express
+npm install knex
+npm install pg
+npm install dotenv
+npm install nodemon
+```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DATABASE soloMVP;
+\q
 
-Currently, two official plugins are available:
+````
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+.env ファイルの作成（USER や PASSWORD など必要に応じて記述してください）
 
-## React Compiler
+中身は
+```
+DB_USER=
+DB_PASSWORD=
+DB_NAME=soloMVP
+```
+マイグレーションとシード
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```sh
+npm run db:migrate
+npm run db:seed
+```
 
-## Expanding the ESLint configuration
+データベースの確認
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+psql -d soloMVP
+\dt
+SELECT * FROM health_logs;
+\q
+```A
+````
