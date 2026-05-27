@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.string("birth", 64).notNullable();
     table.string("breed", 64).notNullable();
     table.string("gender", 64).notNullable();
-    table.string("image", 255).notNullable();
+    table.text("image", 255).notNullable();
   });
 };
 

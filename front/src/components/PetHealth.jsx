@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function PetHealth({ currentId, setScreen }) {
+function PetHealth({ currentId }) {
+  const navigate = useNavigate();
+
   const getTodayString = () => {
     const d = new Date();
     const yyyy = d.getFullYear();
@@ -19,7 +22,6 @@ function PetHealth({ currentId, setScreen }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 💡 わざわざ変数を作らず、JSON.stringify の中に直接データを書きます！
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,7 +44,7 @@ function PetHealth({ currentId, setScreen }) {
       const result = await response.json();
 
       if (result.ok) {
-        setScreen("pet");
+        navigate("/top/pet");
       }
     } catch (err) {
       console.error("健康状態の登録に失敗しました", err);
@@ -66,8 +68,7 @@ function PetHealth({ currentId, setScreen }) {
         <div>
           <label>体重(kg)：</label>
           <input
-            type="number"
-            step="0.1"
+            type="text"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
           />
@@ -104,8 +105,8 @@ function PetHealth({ currentId, setScreen }) {
           <label>ウンチの状態：</label>
           <select value={poop} onChange={(e) => setPoop(e.target.value)}>
             <option value="良い">良い（バナナ状）</option>
-            <option value="軟便・下痢">軟便・下痢</option>
-            <option value="硬い・出ない">硬い・出ない</option>
+            <option value="下痢気味">下痢気味</option>
+            <option value="出ない">出ない</option>
           </select>
         </div>
 
@@ -113,8 +114,8 @@ function PetHealth({ currentId, setScreen }) {
       </form>
 
       <div>
-        <button onClick={() => setScreen("top")}>TOP</button>
-        <button onClick={() => setScreen("pet")}>戻る</button>
+        <button onClick={() => navigate("/top")}>TOP</button>
+        <button onClick={() => navigate("/top/pet")}>戻る</button>
       </div>
     </div>
   );

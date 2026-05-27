@@ -8,6 +8,7 @@ function createHealthRepository(knex, table = "health_logs") {
         pet_id: payload.petId,
         date: payload.date,
         weight: payload.weight ? parseFloat(payload.weight) : null,
+        status: payload.status,
         food: payload.food,
         water: payload.water,
         poop: payload.poop,

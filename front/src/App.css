@@ -197,10 +197,12 @@ div {
   background-color: rgb(241, 241, 241);
 }
 
-.weight-chart,
-.food-chart,
-.water-chart,
-.poop-chart {
+.healthButton {
+  font-size: 20px;
+  width: 160px;
+  height: 40px;
+}
+.recharts-wrapper {
   display: block;
   margin: 10px auto;
 }

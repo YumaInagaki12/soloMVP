@@ -1,18 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-function Top({ pets, setScreen, setCurrentId }) {
+function Top({ pets, setCurrentId }) {
+  const navigate = useNavigate();
+
   return (
     <div>
-      <h1>トップ画面</h1>
-
+      <h1>トップページ</h1>
       <div>
-        <h2>登録ペット</h2>
-        {pets.map((pet, index) => (
+        <h2>ペット一覧</h2>
+        {pets.map((pet) => (
           <button
             key={pet.id}
             onClick={() => {
               setCurrentId(pet.id);
-              setScreen("pet");
+              navigate("/top/pet");
             }}
           >
             <img src={pet.image} alt={pet.name}></img>
@@ -21,7 +23,7 @@ function Top({ pets, setScreen, setCurrentId }) {
           </button>
         ))}
       </div>
-      <button onClick={() => setScreen("addpet")}>ペットの追加</button>
+      <button onClick={() => navigate("/top/addpet")}>ペットの追加</button>
     </div>
   );
 }

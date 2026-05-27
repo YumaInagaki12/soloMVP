@@ -1,17 +1,28 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Top from "./components/Top";
 import AddPet from "./components/AddPet";
 import MyPet from "./components/MyPet";
 import PetHealth from "./components/PetHealth";
 
-function App() {
-  const [screen, setScreen] = useState("top");
-  const [pets, setPets] = useState([]);
-  const [healthLogs, setHealthLogs] = useState([]);
-  const [currentId, setCurrentId] = useState(null);
+function AppContent({
+  pets,
+  setPets,
+  healthLogs,
+  setHealthLogs,
+  currentId,
+  setCurrentId,
+}) {
+  const location = useLocation();
 
-  useEffect(() => {
+  const fetchPets = () => {
     fetch("http://localhost:3000/api/pets")
       .then((res) => res.json())
       .then((result) => {
@@ -20,9 +31,9 @@ function App() {
         }
       })
       .catch((err) => console.error("api/petsでペット一覧の取得に失敗", err));
-  }, [screen]);
+  };
 
-  useEffect(() => {
+  const fetchHealthLogs = () => {
     if (currentId !== null) {
       fetch(`http://localhost:3000/api/health-logs/${currentId}`)
         .then((res) => res.json())
@@ -35,32 +46,52 @@ function App() {
           console.error("api/health_logs/currentIdで健康ログの取得に失敗", err),
         );
     }
-  }, [currentId, screen]);
+  };
 
-  if (screen === "top") {
-    return (
-      <Top pets={pets} setScreen={setScreen} setCurrentId={setCurrentId} />
-    );
-  }
+  useEffect(() => {
+    fetchPets();
+  }, [location.pathname]);
 
-  if (screen === "addpet") {
-    return <AddPet setScreen={setScreen} />;
-  }
+  useEffect(() => {
+    fetchHealthLogs();
+  }, [location.pathname]);
 
-  if (screen === "pet") {
-    return (
-      <MyPet
-        pets={pets}
-        healthLogs={healthLogs}
-        currentId={currentId}
-        setScreen={setScreen}
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/top" replace />} />
+      <Route
+        path="/top"
+        element={<Top pets={pets} setCurrentId={setCurrentId} />}
       />
-    );
-  }
+      <Route path="/top/addpet" element={<AddPet />} />
+      <Route
+        path="/top/pet"
+        element={
+          <MyPet pets={pets} healthLogs={healthLogs} currentId={currentId} />
+        }
+      />
+      <Route path="/top/health" element={<PetHealth currentId={currentId} />} />
+    </Routes>
+  );
+}
 
-  if (screen === "health") {
-    return <PetHealth currentId={currentId} setScreen={setScreen} />;
-  }
+function App() {
+  const [pets, setPets] = useState([]);
+  const [healthLogs, setHealthLogs] = useState([]);
+  const [currentId, setCurrentId] = useState(null);
+
+  return (
+    <Router>
+      <AppContent
+        pets={pets}
+        setPets={setPets}
+        healthLogs={healthLogs}
+        setHealthLogs={setHealthLogs}
+        currentId={currentId}
+        setCurrentId={setCurrentId}
+      />
+    </Router>
+  );
 }
 
 export default App;
