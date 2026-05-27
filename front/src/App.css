@@ -201,10 +201,6 @@ div {
 .food-chart,
 .water-chart,
 .poop-chart {
-  width: 300px;
-  height: 150px;
+  display: block;
+  margin: 10px auto;
 }
-
-/* .weight-chart {
-  color: aqua;
-} */

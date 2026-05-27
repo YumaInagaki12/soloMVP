@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function PetHealth({ healthLogs, setHealthLogs, currentId, setScreen }) {
+function PetHealth({ currentId, setScreen }) {
   const getTodayString = () => {
     const d = new Date();
     const yyyy = d.getFullYear();
@@ -16,16 +16,37 @@ function PetHealth({ healthLogs, setHealthLogs, currentId, setScreen }) {
   const [water, setWater] = useState("いつも通り");
   const [poop, setPoop] = useState("良い");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setHealthLogs([
-      ...healthLogs,
-      { petId: String(currentId), date, weight, status, food, water, poop },
-    ]);
+    // 💡 わざわざ変数を作らず、JSON.stringify の中に直接データを書きます！
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        petId: currentId,
+        date,
+        weight,
+        status,
+        food,
+        water,
+        poop,
+      }),
+    };
 
-    // 💡 入力して決定を押したら、そのペットの詳細画面（"pet"）に戻す
-    setScreen("pet");
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/health-logs",
+        options,
+      );
+      const result = await response.json();
+
+      if (result.ok) {
+        setScreen("pet");
+      }
+    } catch (err) {
+      console.error("健康状態の登録に失敗しました", err);
+    }
   };
 
   return (

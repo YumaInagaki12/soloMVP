@@ -1,13 +1,10 @@
 import React from "react";
 
 function PetProfile({ pet }) {
-  let head = `${pet.name}のプロフィール`;
-  if (pet.gender === "オス") head = `${pet.name}くんのプロフィール`;
-  if (pet.gender === "メス") head = `${pet.name}ちゃんのプロフィール`;
   return (
     <div>
-      <h3>{head}</h3>
-      {pet.image && <img src={pet.image} alt={pet.name} />}
+      <h2>{pet.name}のプロフィール</h2>
+      <img src={pet.image} />
       <p>名前：{pet.name}</p>
       <p>誕生日：{pet.birth}</p>
       <p>犬種：{pet.breed}</p>

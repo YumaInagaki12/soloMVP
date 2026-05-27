@@ -9,9 +9,9 @@ function Top({ pets, setScreen, setCurrentId }) {
         <h2>登録ペット</h2>
         {pets.map((pet, index) => (
           <button
-            key={index}
+            key={pet.id}
             onClick={() => {
-              setCurrentId(index);
+              setCurrentId(pet.id);
               setScreen("pet");
             }}
           >

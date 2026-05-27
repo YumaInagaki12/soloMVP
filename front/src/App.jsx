@@ -1,15 +1,41 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Top from "./components/Top";
 import AddPet from "./components/AddPet";
 import MyPet from "./components/MyPet";
 import PetHealth from "./components/PetHealth";
 
 function App() {
-  const [screen, setScreen] = useState("top"); //screenで画面遷移の管理
-  const [pets, setPets] = useState([]); //petを配列で管理
-  const [healthLogs, setHealthLogs] = useState([]); //健康に関する情報を配列で管理
-  const [currentId, setCurrentId] = useState(null); //petのindexを管理
+  const [screen, setScreen] = useState("top");
+  const [pets, setPets] = useState([]);
+  const [healthLogs, setHealthLogs] = useState([]);
+  const [currentId, setCurrentId] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/pets")
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.ok) {
+          setPets(result.data);
+        }
+      })
+      .catch((err) => console.error("api/petsでペット一覧の取得に失敗", err));
+  }, [screen]);
+
+  useEffect(() => {
+    if (currentId !== null) {
+      fetch(`http://localhost:3000/api/health-logs/${currentId}`)
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.ok) {
+            setHealthLogs(result.data);
+          }
+        })
+        .catch((err) =>
+          console.error("api/health_logs/currentIdで健康ログの取得に失敗", err),
+        );
+    }
+  }, [currentId, screen]);
 
   if (screen === "top") {
     return (
@@ -18,7 +44,7 @@ function App() {
   }
 
   if (screen === "addpet") {
-    return <AddPet pets={pets} setPets={setPets} setScreen={setScreen} />;
+    return <AddPet setScreen={setScreen} />;
   }
 
   if (screen === "pet") {
@@ -33,17 +59,8 @@ function App() {
   }
 
   if (screen === "health") {
-    return (
-      <PetHealth
-        healthLogs={healthLogs}
-        setHealthLogs={setHealthLogs}
-        currentId={currentId}
-        setScreen={setScreen}
-      />
-    );
+    return <PetHealth currentId={currentId} setScreen={setScreen} />;
   }
-
-  return null;
 }
 
 export default App;

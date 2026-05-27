@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-// import { useBarStackClipPathUrl } from "recharts/types/cartesian/BarStack";
 
-function AddPet({ pets, setPets, setScreen }) {
+function AddPet({ setScreen }) {
   const [name, setName] = useState("");
   const [birth, setBirth] = useState("");
   const [breed, setBreed] = useState("");
@@ -11,20 +10,34 @@ function AddPet({ pets, setPets, setScreen }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      const reader = new FileReader(); //FileRender()でfileを文字データに変換
+      reader.onloadend = () => setImage(reader.result);
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setPets([...pets, { name, birth, breed, gender, image }]);
-    setScreen("top");
+  const handleSubmit = async (e) => {
+    e.preventDefault(); //デフォルト処理を止める
+    const petData = { name, birth, breed, gender, image };
+
+    try {
+      const response = await fetch("http://localhost:3000/api/pets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(petData),
+      });
+      const result = await response.json();
+      if (result.ok) {
+        setScreen("top"); //登録したらtop画面に戻る
+      }
+    } catch (err) {
+      console.error("ペットの登録に失敗しました", err);
+    }
   };
 
   return (
     <div>
-      <h1>ペット追加</h1>
-
+      <h1>ペットの追加</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>名前：</label>
@@ -36,7 +49,7 @@ function AddPet({ pets, setPets, setScreen }) {
         </div>
         <div>
           <label>画像：</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <input type="file" onChange={handleImageChange} />
         </div>
         <div>
           <label>生年月日：</label>
@@ -73,13 +86,11 @@ function AddPet({ pets, setPets, setScreen }) {
           />
           メス
         </div>
-
         <button type="submit">登録</button>
       </form>
-
       <div>
-        <button onClick={() => setScreen("top")}>トップへ戻る</button>
-        <button onClick={() => setScreen("top")}>上の階層に戻る</button>
+        <button onClick={() => setScreen("top")}>TOP</button>
+        <button onClick={() => setScreen("top")}>戻る</button>
       </div>
     </div>
   );
